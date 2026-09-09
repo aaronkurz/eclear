@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.python-version
+dist/
+build/
+*.egg-info/
+
+# Test / type-check artefacts
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Frontend
+js/node_modules/
+js/coverage/
+
+# NOTE: eclear/static/enrichment.js is committed on purpose -- it is the built
+# bundle the widget loads at import, so `pip install eclear` needs no Node.

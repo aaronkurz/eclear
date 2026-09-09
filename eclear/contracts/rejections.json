@@ -1,0 +1,77 @@
+{
+  "_note": "What each side refuses to stage. `python` is the fragment validate_event_spec's reason must contain; `ts` the fragment stageBlocker's message must contain; null means accepted. The two are recorded separately because they legitimately word some cases differently — Python names the offending value, the frontend names the empty picker — but neither may go silent on a case the other rejects.",
+
+  "cases": [
+    {
+      "name": "a well-formed custom binning is accepted by both",
+      "kind": "binning", "column": "dose_level",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "labels": [] },
+      "edges": [2, 4], "taken": [],
+      "python": null, "ts": null
+    },
+    {
+      "name": "no edges",
+      "kind": "binning", "column": "dose_level",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "labels": [] },
+      "edges": [], "taken": [],
+      "python": "at least one edge", "ts": "at least one edge"
+    },
+    {
+      "name": "repeated edges",
+      "kind": "binning", "column": "dose_level",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "labels": [] },
+      "edges": [4, 4], "taken": [],
+      "python": "must be distinct", "ts": "must be distinct"
+    },
+    {
+      "name": "two bins named the same",
+      "kind": "binning", "column": "dose_level",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "labels": ["same", "same"] },
+      "edges": [4], "taken": [],
+      "python": "labels must be distinct", "ts": "labels must be distinct"
+    },
+    {
+      "name": "a bin renamed onto its neighbour's default",
+      "kind": "binning", "column": "dose_level",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "labels": ["bin_2", ""] },
+      "edges": [4], "taken": [],
+      "python": "labels must be distinct", "ts": "labels must be distinct"
+    },
+    {
+      "name": "the column has no name",
+      "kind": "binning", "column": "",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "labels": [] },
+      "edges": [4], "taken": [],
+      "python": "needs a name", "ts": "needs a name"
+    },
+    {
+      "name": "the name is already on the log",
+      "kind": "binning", "column": "dose",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "labels": [] },
+      "edges": [4], "taken": ["dose"],
+      "python": "already exists", "ts": "already exists"
+    },
+    {
+      "name": "a time binning needs no edges at all",
+      "kind": "binning", "column": "weekday",
+      "draft": { "mode": "time", "type": "Treat", "timeSource": "time:timestamp", "part": "weekday", "labels": [] },
+      "edges": [], "taken": [],
+      "python": null, "ts": null
+    },
+    {
+      "name": "an arithmetic column with a constant that is not a number",
+      "note": "Asymmetric on purpose, and verified: the frontend blocks this, while Python accepts the NaN the parse would produce (`constant is None` is its only check) and would write an all-NaN column. The frontend is the only guard, so this row exists to stop it being removed.",
+      "kind": "arithmetic", "column": "scaled",
+      "draft": { "type": "Treat", "left": "dose", "op": "*", "right": null, "constant": "abc" },
+      "edges": [], "taken": [],
+      "python": null, "ts": "not a number"
+    },
+    {
+      "name": "a well-formed arithmetic column is accepted by both",
+      "kind": "arithmetic", "column": "scaled",
+      "draft": { "type": "Treat", "left": "dose", "op": "*", "right": null, "constant": "2" },
+      "edges": [], "taken": [],
+      "python": null, "ts": null
+    }
+  ]
+}

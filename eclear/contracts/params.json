@@ -1,0 +1,76 @@
+{
+  "_note": "The wire format. `draft` is one slice of the frontend's Drafts; `params` is exactly what draftParams emits for it, and exactly what Python reads off spec.params. Rename a key on either side and one of the two suites fails.",
+
+  "cases": [
+    {
+      "name": "arithmetic over two columns",
+      "kind": "arithmetic", "column": "ratio", "event_type": "Treat",
+      "draft": { "type": "Treat", "left": "dose", "op": "/", "right": "reading", "constant": "1" },
+      "edges": [],
+      "params": { "left": "dose", "op": "/", "right": "reading", "constant": null }
+    },
+    {
+      "name": "arithmetic over a column and a constant",
+      "kind": "arithmetic", "column": "halved", "event_type": "Treat",
+      "draft": { "type": "Treat", "left": "dose", "op": "*", "right": null, "constant": "2.5" },
+      "edges": [],
+      "params": { "left": "dose", "op": "*", "right": null, "constant": 2.5 }
+    },
+    {
+      "name": "delta to any neighbour carries a null neighbour_type",
+      "kind": "delta", "column": "gap_h", "event_type": "Treat",
+      "draft": { "type": "Treat", "direction": "prev", "neighbour": "any", "neighbourType": "Check", "unit": "hours", "missing": "NaT" },
+      "edges": [],
+      "params": { "direction": "prev", "neighbour": "any", "neighbour_type": null, "unit": "hours", "missing": "NaT" }
+    },
+    {
+      "name": "delta to a chosen type sends the type",
+      "kind": "delta", "column": "until_check", "event_type": "Treat",
+      "draft": { "type": "Treat", "direction": "next", "neighbour": "type", "neighbourType": "Check", "unit": "days", "missing": "zero" },
+      "edges": [],
+      "params": { "direction": "next", "neighbour": "type", "neighbour_type": "Check", "unit": "days", "missing": "zero" }
+    },
+    {
+      "name": "delta to the same type does not send one",
+      "kind": "delta", "column": "gap_same", "event_type": "Treat",
+      "draft": { "type": "Treat", "direction": "prev", "neighbour": "same", "neighbourType": "Check", "unit": "timedelta", "missing": "NaT" },
+      "edges": [],
+      "params": { "direction": "prev", "neighbour": "same", "neighbour_type": null, "unit": "timedelta", "missing": "NaT" }
+    },
+    {
+      "name": "running aggregation honours the carry choice",
+      "kind": "running_agg", "column": "total", "event_type": "*",
+      "draft": { "source": "dose", "aggregate": "cumsum", "carry": "zero" },
+      "edges": [],
+      "params": { "source": "dose", "aggregate": "cumsum", "carry": "zero" }
+    },
+    {
+      "name": "a carryless aggregation forces carry, whatever the draft says",
+      "kind": "running_agg", "column": "lowest", "event_type": "*",
+      "draft": { "source": "dose", "aggregate": "runmin", "carry": "zero" },
+      "edges": [],
+      "params": { "source": "dose", "aggregate": "runmin", "carry": "carry" }
+    },
+    {
+      "name": "numeric binning sends edges, labels and the method it arrived by",
+      "kind": "binning", "column": "dose_level", "event_type": "Treat",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "custom", "bins": "4", "edges": [2, 4], "labels": ["low", "mid", "high"], "draft": "", "timeSource": "time:timestamp", "part": "hour" },
+      "edges": [2, 4],
+      "params": { "mode": "numeric", "source": "dose", "edges": [2, 4], "labels": ["low", "mid", "high"], "method": "custom" }
+    },
+    {
+      "name": "unnamed bins are filled in before they are sent",
+      "kind": "binning", "column": "dose_bands", "event_type": "Treat",
+      "draft": { "mode": "numeric", "type": "Treat", "source": "dose", "method": "quantile", "bins": "3", "edges": [], "labels": ["low", ""], "draft": "", "timeSource": "time:timestamp", "part": "hour" },
+      "edges": [2, 4],
+      "params": { "mode": "numeric", "source": "dose", "edges": [2, 4], "labels": ["low", "bin_2", "bin_3"], "method": "quantile" }
+    },
+    {
+      "name": "time binning sends the timestamp column, not the numeric one",
+      "kind": "binning", "column": "weekday", "event_type": "Treat",
+      "draft": { "mode": "time", "type": "Treat", "source": "dose", "method": "quantile", "bins": "4", "edges": [], "labels": [], "draft": "", "timeSource": "time:timestamp", "part": "weekday" },
+      "edges": [],
+      "params": { "mode": "time", "source": "time:timestamp", "part": "weekday" }
+    }
+  ]
+}

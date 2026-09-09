@@ -1,0 +1,42 @@
+{
+  "columns": [
+    { "kind": "arithmetic",  "params": { "left": "dose", "op": "/", "right": "Age" },                                        "expected": "dose_per_Age" },
+    { "kind": "arithmetic",  "params": { "left": "dose", "op": "*", "right": null, "constant": 2 },                          "expected": "dose_x_2" },
+    { "kind": "arithmetic",  "params": { "left": "org:group", "op": "+", "right": "lifecycle:transition" },                  "expected": "org_group_plus_lifecycle_transition" },
+    { "kind": "arithmetic",  "params": { "left": "a", "op": "−", "right": "b" },                                        "expected": "a_minus_b" },
+    { "kind": "arithmetic",  "params": { "left": "a", "op": "×", "right": "b" },                                        "expected": "a_x_b" },
+    { "kind": "arithmetic",  "params": { "left": "a", "op": "÷", "right": "b" },                                        "expected": "a_per_b" },
+    { "kind": "arithmetic",  "params": { "left": "a", "op": "?", "right": "b" },                                             "expected": "a_op_b" },
+
+    { "kind": "delta",       "params": { "direction": "prev", "neighbour": "any", "unit": "hours" },                         "expected": "since_prev_h" },
+    { "kind": "delta",       "params": { "direction": "next", "neighbour": "same", "unit": "min" },                          "expected": "until_next_same_min" },
+    { "kind": "delta",       "params": { "direction": "prev", "neighbour": "type", "neighbour_type": "Check", "unit": "timedelta" }, "expected": "since_prev_Check" },
+    { "kind": "delta",       "params": { "direction": "prev", "neighbour": "type", "neighbour_type": "Send Fine", "unit": "days" },  "expected": "since_prev_Send_Fine_d" },
+
+    { "kind": "running_agg", "params": { "source": "Dose", "aggregate": "cumsum" },                                          "expected": "dose_cum" },
+    { "kind": "running_agg", "params": { "source": "Dose", "aggregate": "runmin" },                                          "expected": "dose_running_min" },
+    { "kind": "running_agg", "params": { "source": "Dose", "aggregate": "runmax" },                                          "expected": "dose_running_max" },
+    { "kind": "running_agg", "params": { "source": "Dose", "aggregate": "ffill" },                                           "expected": "dose_last_seen" },
+    { "kind": "running_agg", "params": { "source": "Total Amount", "aggregate": "count" },                                   "expected": "total_amount_count_so_far" },
+
+    { "kind": "binning",     "params": { "mode": "numeric", "source": "dose" },                                              "expected": "dose_level" },
+    { "kind": "binning",     "params": { "mode": "numeric", "source": "org:resource" },                                      "expected": "org_resource_level" },
+    { "kind": "binning",     "params": { "mode": "time", "source": "time:timestamp", "part": "weekday" },                    "expected": "time_timestamp_weekday" },
+    { "kind": "binning",     "params": { "mode": "time", "source": "time:timestamp", "part": "hour" },                       "expected": "time_timestamp_hour" }
+  ],
+
+  "slugs": [
+    { "input": "org:resource", "expected": "org_resource" },
+    { "input": "a  b",         "expected": "a_b" },
+    { "input": "__x__",        "expected": "x" },
+    { "input": "a-b_c",        "expected": "a_b_c" },
+    { "input": "9lives",       "expected": "9lives" },
+    { "input": "",             "expected": "" },
+    { "input": "!!!",          "expected": "" },
+    { "input": "Ünïcode", "expected": "Ünïcode" },
+    { "input": "città",   "expected": "città" },
+    { "input": "Prüfung", "expected": "Prüfung" },
+    { "input": "日本語", "expected": "日本語" },
+    { "input": "²",       "expected": "²" }
+  ]
+}
