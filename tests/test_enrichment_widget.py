@@ -277,8 +277,8 @@ def test_a_failing_preview_reports_instead_of_raising(widget):
 # ----------------------------------------------------------------------
 # handing the case log on
 # ----------------------------------------------------------------------
-def test_case_log_feeds_the_rule_builder_payload(widget):
-    """The case log the widget hands out carries provenance InterOX can read."""
+def test_case_log_carries_readable_provenance(widget):
+    """The case log the widget hands out describes its own derived columns."""
     widget.apply_request = {
         'add': [times_spec('Pay', 'end').to_dict(),
                 tracking_spec('amount', 'max', 'Pay').to_dict()],

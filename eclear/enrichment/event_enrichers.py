@@ -39,7 +39,7 @@ ACTIVITY_COL = 'concept:name'
 
 #: ``DataFrame.attrs`` key the applied event specs are recorded under, so an
 #: enriched event log carries its own provenance the way a case log does.
-EVENT_PROVENANCE_KEY = 'interox_event_enrichment'
+EVENT_PROVENANCE_KEY = 'eclear_event_enrichment'
 
 #: Seconds in an hour: every timespan is rendered through hours, because
 #: :data:`~eclear.enrichment.event_specs.UNIT_HOURS` is written in them.

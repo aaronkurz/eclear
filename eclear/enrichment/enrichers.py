@@ -39,7 +39,7 @@ ACTIVITY_COL = 'concept:name'
 REL_TIME_COL = 'rel_time'
 
 #: Key under which the provenance record lives in ``DataFrame.attrs``.
-PROVENANCE_KEY = 'interox_enrichment'
+PROVENANCE_KEY = 'eclear_enrichment'
 
 
 # ----------------------------------------------------------------------
